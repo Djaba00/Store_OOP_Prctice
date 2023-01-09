@@ -162,24 +162,18 @@ namespace OnlineStore
     /// <summary>
     /// Конструктор продукта
     /// </summary>
-    class Product
+    class Product<TCount>
     {
         public string name;
         public int price;
-        public double weight;
-        public int count;
-
-        public Product() { name = "Unlnown product"; price = 0; count = 0; }
-        public Product(string n, int p, double w) { name = n; price = p; weight = w; }
-        public Product(string n, int p, int c) { name = n; price = p; count = c; }
+        public TCount count;
     }
 
     /// <summary>
     /// Оформление нового заказа
     /// </summary>
-    class NewOrder<Tcount> : Product
+    class NewOrder<Tcount> : Product<Tcount>
     {
-
         string countOption = Console.ReadLine();
         
         public Tcount pCount;
@@ -201,14 +195,20 @@ namespace OnlineStore
             int productPrice = Int32.Parse(Console.ReadLine());
             OrdersList.ProductPrice.Add(productPrice);
 
-            if(pCount is double)
+            if (pCount is double)
             {
                 Console.Write("Укажите количество товара в килограммах: ");
-                 = Console.ReadLine());
-                
+                double productWeight = Double.Parse(Console.ReadLine());
+                OrdersList.ProductWeight.Add(productWeight);
+                OrdersList.ProductCount.Add(0);
             }
-
-            //Product product = new Product();
+            if (pCount is int)
+            {
+                Console.Write("Укажите количество товара в штуках: ");
+                int productCount = Int32.Parse(Console.ReadLine());
+                OrdersList.ProductWeight.Add(0);
+                OrdersList.ProductCount.Add(productCount);
+            }
 
             Console.Write($"Комментарий к заказу #{Number}: ");
             OrdersList.OrderDescription.Add(Console.ReadLine());
@@ -223,7 +223,6 @@ namespace OnlineStore
     {
         public TOrderID OrderId;
 
-
         public static int OrderReqest()
         {
             Console.WriteLine("Заказов в базе {0}.", OrdersList.OrderID.Count);
@@ -231,11 +230,14 @@ namespace OnlineStore
             int orderNumber = Int32.Parse(Console.ReadLine());
             return orderNumber;
         }
+
         public static void DisplayOrderInf(int orderNumber)
         {
             Console.WriteLine("Данные о заказе {0}:", orderNumber);
+            
             Console.WriteLine($"Получатель: {OrdersList.OrderBuyer[orderNumber]}\nАдрес доставки: {OrdersList.OrderAddress[orderNumber]}" +
-                $"\nТовар: {OrdersList.ProductName[orderNumber]} {OrdersList.ProductCount[orderNumber]} шт" +
+                $"\nТовар: {OrdersList.ProductName[orderNumber]} \tКолиество: " +
+                $"{Math.Max(OrdersList.ProductCount[orderNumber], OrdersList.ProductWeight[orderNumber])}" +
                 $"\nКомментарий к заказу: {OrdersList.OrderDescription[orderNumber]}");
         }
     }
