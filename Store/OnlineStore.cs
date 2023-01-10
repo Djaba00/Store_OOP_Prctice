@@ -8,7 +8,7 @@ namespace OnlineStore
     public static class UsersList
     {
         public static List<int> UserID = new List<int>() { 0, 1, 2, 3 };
-        public static List<string> UserName = new List<string>() { "Tim", "Jhon", "Ann", "Jim", "Bob" };
+        public static List<string> UserName = new List<string>() { "Tim", "Jhon", "Ann", "Jim" };
         public static List<string> UserPhone = new List<string>() { "+7121314", "+7121517", "+7910120", "+7834576" };
         public static List<string> UserAddress = new List<string>() { "Semenov St.", "5th Avenue", "7th Way", "7th Gaidara" };
     }
@@ -28,13 +28,9 @@ namespace OnlineStore
     /// <summary>
     /// Регистрация новго пользователя
     /// </summary>
-    ///
-
-    // Добавить класс User
-    public class NewUser
+    public static class NewUser
     {
-
-        public static void userAdd()
+        public static void UserAdd()
         {
             Console.WriteLine("Регистрация нового пользователя");
             UsersList.UserID.Add(UsersList.UserID.Count);
@@ -55,20 +51,35 @@ namespace OnlineStore
         }
     }
 
+    public static class UserInfo
+    {
+        public static void DisplayUserInfo(this int UserID)
+        {
+            if (UserID <= UsersList.UserID.Count - 1 && UserID >= 0)
+            {
+                Console.WriteLine($"Информация о ID#{UserID}: \nИмя: {UsersList.UserName[UserID]}\nТелефон: {UsersList.UserPhone[UserID]}" +
+                    $"\nАдрес: {UsersList.UserAddress[UserID]}");
+            }
+            else
+                Console.WriteLine("Пользователь не найден.");
+        }
+        
+    }
     /// <summary>
     /// Данные заказов
     /// </summary>
     public static class OrdersList
     {
         public static List<int> OrderID = new List<int>() { 0 };
-        public static List<string> OrderDescription = new List<string>() { "Empty order" };
         public static List<string> OrderBuyer = new List<string>() { "Jhon Doe" };
-        public static List<string> OrderAddress = new List<string>() { "Test delivery" };
+        public static List<string> OrderDescription = new List<string>() { "Empty field" };
+        public static List<string> OrderAddress = new List<string>() { "5th Avenue" };
+        public static List<string> OrderDelivery = new List<string>() { "HomeDelivery" };
 
-        public static List<string> ProductName = new List<string>() { "Test product" };
-        public static List<int> ProductPrice = new List<int>() { 0 };
+        public static List<string> ProductName = new List<string>() { "MacBook" };
+        public static List<int> ProductPrice = new List<int>() { 1999 };
         public static List<int> ProductCount = new List<int>() { 1 };
-        public static List<double> ProductWeight = new List<double>() { 1 };
+        public static List<double> ProductWeight = new List<double>() { 0 };
 
     }
 
@@ -77,13 +88,16 @@ namespace OnlineStore
     /// </summary>
     abstract class Delivery
     {
-        public abstract void DeliveryRun(int OrderID);
+        public abstract void DeliveryRun(int OrderID, string Address, out string OrderDelivery);
     }
 
+    /// <summary>
+    /// Доставка на дом
+    /// </summary>
     class HomeDelivery : Delivery
     {
 
-        public override void DeliveryRun(int OrderID)
+        public override void DeliveryRun(int OrderID, string Address, out string OrderDelivery)
         {
             Console.WriteLine("Доступные ТК: DHL, CDEK, GDT");
             Console.Write("Укажите ТК: ");
@@ -92,76 +106,119 @@ namespace OnlineStore
             {
                 case "CDEK":
                     //отправить данные посылки и посылку в ближайший офис CDEK
-                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой CDEK по адресу {OrdersList.OrderAddress[OrderID]}");
+                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой CDEK по адресу {Address}");
                     break;
                 case "GDT":
                     //отправить данные посылки и посылку в ближайший офис GDT
-                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой GDT по адресу {OrdersList.OrderAddress[OrderID]}");
+                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой GDT по адресу {Address}");
                     break;
                 default:
                     //отправить данные посылки и посылку в ближайший офис DHL
-                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой DHL по адресу {OrdersList.OrderAddress[OrderID]}");
+                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой DHL по адресу {Address}");
                     break;
             }
+
+            OrderDelivery = DeliveryCompany;
         }
     }
 
+    /// <summary>
+    /// Доставка в пункт выдачи
+    /// </summary>
     class PickPointDelivery : Delivery
     {
-        public override void DeliveryRun(int OrderID)
+        public override void DeliveryRun(int OrderID, string Address, out string OrderDelivery)
         {
-            
+            Console.WriteLine($"Заказ #{OrderID} будет досатвен в ближайший к {Address} PickPoint");
+            OrderDelivery = "PickPoint";
         }
     }
 
+    /// <summary>
+    /// Доставка в ближайший магазин
+    /// </summary>
     class ShopDelivery : Delivery
     {
-        public override void DeliveryRun(int OrderID)
+        public override void DeliveryRun(int OrderID, string Address, out string OrderDelivery)
         {
-
+            Console.WriteLine($"Заказ #{OrderID} будет досатвен в ближайший к {Address} магазин");
+            OrderDelivery = "ShopDelivery";
         }
     }
 
     /// <summary>
     /// Выбор способа доставки
     /// </summary>
-    static class DeliveryOptions
+    public static class DeliveryOptions
     {
-        public static void Delivery()
+        public static object Delivery()
         {
             Console.WriteLine("Способы доставки:\n1 - HomeDelivery\n2 - PickPointDelivery\n3 - ShopDelivery");
             Console.Write("Выберите способ доставки(1 - 3): ");
             
             object option = null;
-            while (option is null)
-            {
+            string mesure;
                 string number = Console.ReadLine();
                 switch (number)
                 {
                     case "1":
-                        HomeDelivery homeDelivery = new HomeDelivery();
-                        option = homeDelivery;
+                        NewOrder<HomeDelivery> newOrder = new NewOrder<HomeDelivery>();
+                        Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
+                        mesure = Console.ReadLine();
+                        switch(mesure)
+                        {
+                        
+                            case "2":
+                                newOrder.AddOrder<double>();
+                                break;
+                            default:
+                                newOrder.AddOrder<int>();
+                                break;
+                        }
                         break;
                     case "2":
-                        PickPointDelivery pickPointDelivery = new PickPointDelivery();
-                        option = pickPointDelivery;
+                        NewOrder<PickPointDelivery> newOrder1 = new NewOrder<PickPointDelivery>();
+                        Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
+                        mesure = Console.ReadLine();
+                        switch (mesure)
+                        {
+
+                            case "2":
+                                newOrder1.AddOrder<double>();
+                                break;
+                            default:
+                                newOrder1.AddOrder<int>();
+                                break;
+                        }
                         break;
                     case "3":
-                        ShopDelivery shopDelivery = new ShopDelivery();
-                        option = shopDelivery;
+                        NewOrder<ShopDelivery> newOrder2 = new NewOrder<ShopDelivery>();
+                        Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
+                        mesure = Console.ReadLine();
+                        switch (mesure)
+                        {
+
+                            case "2":
+                                newOrder2.AddOrder<double>();
+                                break;
+                            default:
+                                newOrder2.AddOrder<int>();
+                                break;
+                        }
                         break;
                     default:
                         Console.WriteLine("Некоректный запрос. Укажите номер нужного варианта...");
                         break;
-
-                }
             }
+
+            return option;
         }
     }
 
     /// <summary>
     /// Конструктор продукта
     /// </summary>
+    /// <typeparam name="TCount"></typeparam>
     class Product<TCount>
     {
         public string name;
@@ -172,14 +229,16 @@ namespace OnlineStore
     /// <summary>
     /// Оформление нового заказа
     /// </summary>
-    class NewOrder<Tcount> : Product<Tcount>
+    /// <typeparam name="Tcount"></typeparam>
+    /// <typeparam name="TDelivery"></typeparam>
+    class NewOrder<TDelivery>
+        where TDelivery : Delivery, new()
     {
-        string countOption = Console.ReadLine();
-        
-        public Tcount pCount;
+        //public TDelivery delivery;
 
-        public void AddOrder()
+        public void AddOrder<TCount>()
         {
+            TCount pCount = default(TCount);
             OrdersList.OrderID.Add(OrdersList.OrderID.Count);
             int Number = OrdersList.OrderID[OrdersList.OrderID.Count - 1];
 
@@ -202,6 +261,7 @@ namespace OnlineStore
                 OrdersList.ProductWeight.Add(productWeight);
                 OrdersList.ProductCount.Add(0);
             }
+
             if (pCount is int)
             {
                 Console.Write("Укажите количество товара в штуках: ");
@@ -216,13 +276,20 @@ namespace OnlineStore
 
             string Address = UsersList.UserAddress[User];
             OrdersList.OrderAddress.Add(Address);
+
+            Console.WriteLine("Доставка\n");
+            TDelivery delivery = new TDelivery();
+            string OrderDelivery;
+            delivery.DeliveryRun(Number, Address, out OrderDelivery);
+            OrdersList.OrderDelivery.Add(OrderDelivery);
         }
     }
 
-    class Order<TOrderID>
+    /// <summary>
+    /// Запрос информации о конкретном заказе 
+    /// </summary>
+    public static class OrderInfo
     {
-        public TOrderID OrderId;
-
         public static int OrderReqest()
         {
             Console.WriteLine("Заказов в базе {0}.", OrdersList.OrderID.Count);
@@ -231,14 +298,18 @@ namespace OnlineStore
             return orderNumber;
         }
 
-        public static void DisplayOrderInf(int orderNumber)
+        public static void DisplayOrderInfo(this int orderNumber)
         {
-            Console.WriteLine("Данные о заказе {0}:", orderNumber);
-            
-            Console.WriteLine($"Получатель: {OrdersList.OrderBuyer[orderNumber]}\nАдрес доставки: {OrdersList.OrderAddress[orderNumber]}" +
-                $"\nТовар: {OrdersList.ProductName[orderNumber]} \tКолиество: " +
-                $"{Math.Max(OrdersList.ProductCount[orderNumber], OrdersList.ProductWeight[orderNumber])}" +
-                $"\nКомментарий к заказу: {OrdersList.OrderDescription[orderNumber]}");
+            if (orderNumber >= 0 && orderNumber <= OrdersList.OrderID.Count - 1)
+            {
+                Console.WriteLine("Данные о заказе {0}:", orderNumber);
+                Console.WriteLine($"Получатель: {OrdersList.OrderBuyer[orderNumber]}\nАдрес доставки: {OrdersList.OrderAddress[orderNumber]}" +
+                    $"\nТовар: {OrdersList.ProductName[orderNumber]} \tКолиество: " +
+                    $"{Math.Max(OrdersList.ProductCount[orderNumber], OrdersList.ProductWeight[orderNumber])}" +
+                    $"\nКомментарий к заказу: {OrdersList.OrderDescription[orderNumber]}");
+            }
+            else
+                Console.WriteLine("Заказ не найден");
         }
     }
 }
