@@ -88,7 +88,7 @@ namespace OnlineStore
     /// </summary>
     abstract class Delivery
     {
-        public abstract void DeliveryRun(int OrderID, string Address, out string OrderDelivery);
+        public abstract void DeliveryRun(int orderID, string address, out string OrderDelivery);
     }
 
     /// <summary>
@@ -96,29 +96,28 @@ namespace OnlineStore
     /// </summary>
     class HomeDelivery : Delivery
     {
-
-        public override void DeliveryRun(int OrderID, string Address, out string OrderDelivery)
+        public override void DeliveryRun(int orderID, string address, out string orderDelivery)
         {
             Console.WriteLine("Доступные ТК: DHL, CDEK, GDT");
             Console.Write("Укажите ТК: ");
-            string DeliveryCompany = Console.ReadLine();
-            switch (DeliveryCompany)
+            string deliveryCompany = Console.ReadLine();
+            switch (deliveryCompany)
             {
                 case "CDEK":
                     //отправить данные посылки и посылку в ближайший офис CDEK
-                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой CDEK по адресу {Address}");
+                    Console.WriteLine($"Послылка #{orderID} будет доставлена курьерской службой CDEK по адресу {address}");
                     break;
                 case "GDT":
                     //отправить данные посылки и посылку в ближайший офис GDT
-                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой GDT по адресу {Address}");
+                    Console.WriteLine($"Послылка #{orderID} будет доставлена курьерской службой GDT по адресу {address}");
                     break;
                 default:
                     //отправить данные посылки и посылку в ближайший офис DHL
-                    Console.WriteLine($"Послылка #{OrderID} будет доставлена курьерской службой DHL по адресу {Address}");
+                    Console.WriteLine($"Послылка #{orderID} будет доставлена курьерской службой DHL по адресу {address}");
                     break;
             }
 
-            OrderDelivery = DeliveryCompany;
+            orderDelivery = deliveryCompany;
         }
     }
 
@@ -127,10 +126,10 @@ namespace OnlineStore
     /// </summary>
     class PickPointDelivery : Delivery
     {
-        public override void DeliveryRun(int OrderID, string Address, out string OrderDelivery)
+        public override void DeliveryRun(int orderID, string address, out string orderDelivery)
         {
-            Console.WriteLine($"Заказ #{OrderID} будет досатвен в ближайший к {Address} PickPoint");
-            OrderDelivery = "PickPoint";
+            Console.WriteLine($"Заказ #{orderID} будет досатвен в ближайший к {address} PickPoint");
+            orderDelivery = "PickPoint";
         }
     }
 
@@ -139,10 +138,10 @@ namespace OnlineStore
     /// </summary>
     class ShopDelivery : Delivery
     {
-        public override void DeliveryRun(int OrderID, string Address, out string OrderDelivery)
+        public override void DeliveryRun(int orderID, string address, out string orderDelivery)
         {
-            Console.WriteLine($"Заказ #{OrderID} будет досатвен в ближайший к {Address} магазин");
-            OrderDelivery = "ShopDelivery";
+            Console.WriteLine($"Заказ #{orderID} будет досатвен в ближайший к {address} магазин");
+            orderDelivery = "ShopDelivery";
         }
     }
 
@@ -234,30 +233,38 @@ namespace OnlineStore
     class NewOrder<TDelivery>
         where TDelivery : Delivery, new()
     {
-        //public TDelivery delivery;
+        private int number;
+        private int user;
+        private string productName;
+        private int productPrice;
+        private double productWeight;
+        private int productCount;
+        private string description;
+        private string address;
+        private string orderDelivery;
 
         public void AddOrder<TCount>()
         {
             TCount pCount = default(TCount);
             OrdersList.OrderID.Add(OrdersList.OrderID.Count);
-            int Number = OrdersList.OrderID[OrdersList.OrderID.Count - 1];
+            number = OrdersList.OrderID[OrdersList.OrderID.Count - 1];
 
             Console.Write("ID пользователя: ");
-            int User = UsersList.UserID[Int32.Parse(Console.ReadLine())];
-            OrdersList.OrderBuyer.Add(UsersList.UserName[User]);
+            user = UsersList.UserID[Int32.Parse(Console.ReadLine())];
+            OrdersList.OrderBuyer.Add(UsersList.UserName[user]);
 
             Console.Write("Название товара: ");
-            string productName = Console.ReadLine();
+            productName = Console.ReadLine();
             OrdersList.ProductName.Add(productName);
 
             Console.Write("Укажите цену товара: ");
-            int productPrice = Int32.Parse(Console.ReadLine());
+            productPrice = Int32.Parse(Console.ReadLine());
             OrdersList.ProductPrice.Add(productPrice);
 
             if (pCount is double)
             {
                 Console.Write("Укажите количество товара в килограммах: ");
-                double productWeight = Double.Parse(Console.ReadLine());
+                productWeight = Double.Parse(Console.ReadLine());
                 OrdersList.ProductWeight.Add(productWeight);
                 OrdersList.ProductCount.Add(0);
             }
@@ -265,23 +272,23 @@ namespace OnlineStore
             if (pCount is int)
             {
                 Console.Write("Укажите количество товара в штуках: ");
-                int productCount = Int32.Parse(Console.ReadLine());
+                productCount = Int32.Parse(Console.ReadLine());
                 OrdersList.ProductWeight.Add(0);
                 OrdersList.ProductCount.Add(productCount);
             }
 
-            Console.Write($"Комментарий к заказу #{Number}: ");
+            Console.Write($"Комментарий к заказу #{number}: ");
             OrdersList.OrderDescription.Add(Console.ReadLine());
-            string Description = OrdersList.OrderDescription[OrdersList.OrderDescription.Count - 1];
+            description = OrdersList.OrderDescription[OrdersList.OrderDescription.Count - 1];
 
-            string Address = UsersList.UserAddress[User];
-            OrdersList.OrderAddress.Add(Address);
+            address = UsersList.UserAddress[user];
+            OrdersList.OrderAddress.Add(address);
 
             Console.WriteLine("Доставка\n");
             TDelivery delivery = new TDelivery();
-            string OrderDelivery;
-            delivery.DeliveryRun(Number, Address, out OrderDelivery);
-            OrdersList.OrderDelivery.Add(OrderDelivery);
+
+            delivery.DeliveryRun(number, address, out orderDelivery);
+            OrdersList.OrderDelivery.Add(orderDelivery);
         }
     }
 

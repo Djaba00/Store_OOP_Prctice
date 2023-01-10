@@ -24,13 +24,13 @@
                         Console.WriteLine(help);
                         break;
                     case "user":
-                        while(command != "back" || command != "exit")
+                        while(command != "back" && command != "exit")
                         {
                             UserBlock(out command);
                         }
                         break;
                     case "order":
-                        while(command != "back" || command != "exit")
+                        while(command != "back" && command != "exit")
                         {
                             OrderBlock(out command);
                         }
@@ -51,11 +51,11 @@
         {
             Console.WriteLine("Вы находитесь в блоке user");
             string usercommand = "";
-            //Question question = new Question();
             string question = "";
-            while (usercommand != "back")
+
+            while (usercommand != "back" && usercommand != "exit")
             {
-                Console.Write("Введите команду: ");
+                Console.Write("<user>Введите команду: ");
                 usercommand = Console.ReadLine();
                 switch (usercommand)
                 {
@@ -99,9 +99,9 @@
             string ordercommand = "";
             //Question question = new Question();
             string question = "";
-            while (ordercommand != "back")
+            while (ordercommand != "back" && ordercommand != "exit")
             {
-                Console.Write("Введите команду: ");
+                Console.Write("<order>Введите команду: ");
                 ordercommand = Console.ReadLine();
                 switch (ordercommand)
                 {
