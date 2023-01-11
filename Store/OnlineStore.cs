@@ -18,37 +18,29 @@ namespace OnlineStore
     /// </summary>
     class User
     {
-        public string name;
-        public string phone;
-        public string address;
-        public User() { name = "Unknown"; phone = "Unknown"; address = "Unknown";  }
-        public User(string n, string p, string a) { name = n; phone = p; address = a; }
-    }
+        private string name;
+        private string phone;
+        private string address;
 
-    /// <summary>
-    /// Регистрация новго пользователя
-    /// </summary>
-    public static class NewUser
-    {
-        public static void UserAdd()
+        public User()
         {
             Console.WriteLine("Регистрация нового пользователя");
             UsersList.UserID.Add(UsersList.UserID.Count);
 
             Console.Write("Введите имя: ");
-            string name = Console.ReadLine() ?? "Unknown";
+            name = Console.ReadLine() ?? "Unknown";
 
             Console.Write("Введите номер телефона: ");
-            string phone = Console.ReadLine() ?? "Unknown";
+            phone = Console.ReadLine() ?? "Unknown";
 
             Console.Write("Введите адрес: ");
-            string address = Console.ReadLine() ?? "Unknown";
+            address = Console.ReadLine() ?? "Unknown";
 
-            User newUser = new User(name, phone, address);
-            UsersList.UserName.Add(newUser.name);
-            UsersList.UserPhone.Add(newUser.phone);
-            UsersList.UserAddress.Add(newUser.address);
+            UsersList.UserName.Add(name);
+            UsersList.UserPhone.Add(phone);
+            UsersList.UserAddress.Add(address);
         }
+        public User(string n, string p, string a) { name = n; phone = p; address = a; }
     }
 
     public static class UserInfo
@@ -147,66 +139,63 @@ namespace OnlineStore
     /// </summary>
     public static class DeliveryOptions
     {
-        public static object Delivery()
+        public static void Delivery()
         {
             Console.WriteLine("Способы доставки:\n1 - HomeDelivery\n2 - PickPointDelivery\n3 - ShopDelivery");
             Console.Write("Выберите способ доставки(1 - 3): ");
             
             object option = null;
             string mesure;
-                string number = Console.ReadLine();
-                switch (number)
-                {
-                    case "1":
-                        NewOrder<HomeDelivery> newOrder = new NewOrder<HomeDelivery>();
-                        Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
-                        mesure = Console.ReadLine();
-                        switch(mesure)
-                        {
-                        
-                            case "2":
-                                newOrder.AddOrder<double>();
-                                break;
-                            default:
-                                newOrder.AddOrder<int>();
-                                break;
-                        }
-                        break;
-                    case "2":
-                        NewOrder<PickPointDelivery> newOrder1 = new NewOrder<PickPointDelivery>();
-                        Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
-                        mesure = Console.ReadLine();
-                        switch (mesure)
-                        {
+            string number = Console.ReadLine();
 
-                            case "2":
-                                newOrder1.AddOrder<double>();
-                                break;
-                            default:
-                                newOrder1.AddOrder<int>();
-                                break;
-                        }
-                        break;
-                    case "3":
-                        NewOrder<ShopDelivery> newOrder2 = new NewOrder<ShopDelivery>();
-                        Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
-                        mesure = Console.ReadLine();
-                        switch (mesure)
-                        {
-
-                            case "2":
-                                newOrder2.AddOrder<double>();
-                                break;
-                            default:
-                                newOrder2.AddOrder<int>();
-                                break;
-                        }
-                        break;
-                    default:
-                        Console.WriteLine("Некоректный запрос. Укажите номер нужного варианта...");
-                        break;
-                }
-            return option;
+            switch (number)
+            {
+                case "1":
+                    NewOrder<HomeDelivery> newOrder = new NewOrder<HomeDelivery>();
+                    Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
+                    mesure = Console.ReadLine();
+                    switch (mesure)
+                    {
+                        case "2":
+                            newOrder.AddOrder<double>();
+                            break;
+                        default:
+                            newOrder.AddOrder<int>();
+                            break;
+                    }
+                    break;
+                case "2":
+                    NewOrder<PickPointDelivery> newOrder1 = new NewOrder<PickPointDelivery>();
+                    Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
+                    mesure = Console.ReadLine();
+                    switch (mesure)
+                    {
+                        case "2":
+                            newOrder1.AddOrder<double>();
+                            break;
+                        default:
+                            newOrder1.AddOrder<int>();
+                            break;
+                    }
+                    break;
+                case "3":
+                    NewOrder<ShopDelivery> newOrder2 = new NewOrder<ShopDelivery>();
+                    Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
+                    mesure = Console.ReadLine();
+                    switch (mesure)
+                    {
+                        case "2":
+                            newOrder2.AddOrder<double>();
+                            break;
+                        default:
+                            newOrder2.AddOrder<int>();
+                            break;
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Некоректный запрос. Укажите номер нужного варианта...");
+                    break;
+            }
         }
     }
 
@@ -231,10 +220,12 @@ namespace OnlineStore
     {
         private int number;
         private int user;
+
         private string productName;
         private int productPrice;
         private double productWeight;
         private int productCount;
+
         private string description;
         private string address;
         private string orderDelivery;

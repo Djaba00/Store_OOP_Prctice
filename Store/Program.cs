@@ -60,9 +60,11 @@
                 switch (usercommand)
                 {
                     case "user add":
+                        
                         while (question != "N")
                         {
-                            NewUser.UserAdd();
+                            User newUser = new User();
+
                             Console.Write("Добавить еще пользователя?(Y/N): ");
                             question = Console.ReadLine();
                         }
