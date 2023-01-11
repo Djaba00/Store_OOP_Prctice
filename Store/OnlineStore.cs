@@ -62,8 +62,7 @@ namespace OnlineStore
             }
             else
                 Console.WriteLine("Пользователь не найден.");
-        }
-        
+        } 
     }
     /// <summary>
     /// Данные заказов
@@ -80,7 +79,6 @@ namespace OnlineStore
         public static List<int> ProductPrice = new List<int>() { 1999 };
         public static List<int> ProductCount = new List<int>() { 1 };
         public static List<double> ProductWeight = new List<double>() { 0 };
-
     }
 
     /// <summary>
@@ -116,7 +114,6 @@ namespace OnlineStore
                     Console.WriteLine($"Послылка #{orderID} будет доставлена курьерской службой DHL по адресу {address}");
                     break;
             }
-
             orderDelivery = deliveryCompany;
         }
     }
@@ -208,8 +205,7 @@ namespace OnlineStore
                     default:
                         Console.WriteLine("Некоректный запрос. Укажите номер нужного варианта...");
                         break;
-            }
-
+                }
             return option;
         }
     }
