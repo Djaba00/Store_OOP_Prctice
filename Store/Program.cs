@@ -4,11 +4,13 @@
     {
         public static void Main()
         {
-            Program.ConsoleProgram();
+            List<User> usersList = new List<User>() { new User() { UserID = 0, Name = "Timofey", Phone = "+79055856556", Address = "Semenov St."} };
+
+            Program.ConsoleProgram(usersList);
             Console.ReadKey();
         }
 
-        public static void ConsoleProgram()
+        public static void ConsoleProgram(List<User> usersList)
         {
             string command = "";
 
@@ -16,8 +18,10 @@
             {
                 Console.Write("Для вызова списка команд введите <help>\nВведите команду: ");
                 command = Console.ReadLine();
+
                 string help = "Доступные команды:\n<user> - вход в блок управления данными пользователей\nuser<user add, user info, back>\n" +
                             "<order> - вход в блок управления заказами\n<order add, order info, back>";
+
                 switch (command)
                 {
                     case "help":
@@ -26,13 +30,13 @@
                     case "user":
                         while(command != "back" && command != "exit")
                         {
-                            UserBlock(out command);
+                            UserBlock(usersList,out command);
                         }
                         break;
                     case "order":
                         while(command != "back" && command != "exit")
                         {
-                            OrderBlock(out command);
+                            OrderBlock(usersList, out command);
                         }
                         break;
                     case "exit":
@@ -47,7 +51,7 @@
             Console.ReadLine();
         }
         
-        public static void UserBlock(out string command)
+        public static void UserBlock(List<User> usersList, out string command)
         {
             Console.WriteLine("Вы находитесь в блоке user");
             string usercommand = "";
@@ -63,7 +67,7 @@
                         
                         while (question != "N")
                         {
-                            User newUser = new User();
+                            User.AddUser(usersList);
 
                             Console.Write("Добавить еще пользователя?(Y/N): ");
                             question = Console.ReadLine();
@@ -73,9 +77,9 @@
                     case "user info":
                         while (question != "N")
                         {
-                            Console.Write($"Пользователей в базе {UsersList.UserID.Count}\nВведите ID пользоватея: ");
+                            Console.Write($"Пользователей в базе {usersList.Count}\nВведите ID пользоватея: ");
                             int UserID = Int32.Parse(Console.ReadLine());
-                            UserID.DisplayUserInfo();
+                            UserID.DisplayUserInfo(usersList);
                             Console.Write("Продолжить работу с базой пользователей?(Y/N): ");
                             question = Console.ReadLine();
                         }
@@ -95,7 +99,7 @@
             command = usercommand;
         }
 
-        public static void OrderBlock(out string command)
+        public static void OrderBlock(List<User> usersList, out string command)
         {
             Console.WriteLine("Вы находитесь в блоке oder");
             string ordercommand = "";
@@ -111,7 +115,7 @@
                         while (question != "N")
                         {
                             Console.WriteLine("Новый заказ!");
-                            DeliveryOptions.Delivery();
+                            DeliveryOptions.Delivery(usersList);
                             Console.Write("Добавить еще один заказ?(Y/N): ");
                             question = Console.ReadLine();
                         }

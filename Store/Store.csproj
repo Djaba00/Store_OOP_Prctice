@@ -9,5 +9,6 @@
 
   <ItemGroup>
     <Compile Remove="Users.cs" />
+    <Compile Remove="OnlineStore.cs" />
   </ItemGroup>
 </Project>
