@@ -7,7 +7,7 @@ namespace OnlineStore
     /// </summary>
     public static class DeliveryOptions
     {
-        public static void Delivery(List<User> usersList)
+        public static void Delivery(List<User> usersList, List<Order> ordersList, Order order)
         {
             Console.WriteLine("Способы доставки:\n1 - HomeDelivery\n2 - PickPointDelivery\n3 - ShopDelivery");
             Console.Write("Выберите способ доставки(1 - 3): ");
@@ -19,44 +19,41 @@ namespace OnlineStore
             switch (number)
             {
                 case "1":
-                    NewOrder<HomeDelivery> newOrder = new NewOrder<HomeDelivery>();
                     Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
                     mesure = Console.ReadLine();
                     switch (mesure)
                     {
                         case "2":
-                            newOrder.AddOrder<double>(usersList);
+                            order.AddOrder<double, HomeDelivery>(usersList, ordersList, order);
                             break;
                         default:
-                            newOrder.AddOrder<int>(usersList);
+                            order.AddOrder<int, HomeDelivery>(usersList, ordersList, order);
                             break;
                     }
                     break;
                 case "2":
-                    NewOrder<PickPointDelivery> newOrder1 = new NewOrder<PickPointDelivery>();
                     Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
                     mesure = Console.ReadLine();
                     switch (mesure)
                     {
                         case "2":
-                            newOrder1.AddOrder<double>(usersList);
+                            order.AddOrder<double, PickPointDelivery>(usersList, ordersList, order);
                             break;
                         default:
-                            newOrder1.AddOrder<int>(usersList);
+                            order.AddOrder<int, PickPointDelivery>(usersList, ordersList, order);
                             break;
                     }
                     break;
                 case "3":
-                    NewOrder<ShopDelivery> newOrder2 = new NewOrder<ShopDelivery>();
                     Console.Write("Количество товара в ...\n1 - штуках\n2 - килограммах\nОтвет (1 - 2): ");
                     mesure = Console.ReadLine();
                     switch (mesure)
                     {
                         case "2":
-                            newOrder2.AddOrder<double>(usersList);
+                            order.AddOrder<double, ShopDelivery>(usersList, ordersList, order);
                             break;
                         default:
-                            newOrder2.AddOrder<int>(usersList);
+                            order.AddOrder<int, ShopDelivery>(usersList, ordersList, order);
                             break;
                     }
                     break;

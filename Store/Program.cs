@@ -5,12 +5,13 @@
         public static void Main()
         {
             List<User> usersList = new List<User>() { new User() { UserID = 0, Name = "Timofey", Phone = "+79055856556", Address = "Semenov St."} };
+            List<Order> ordersList = new List<Order>() { new Order() { OrderID = 0, ProductName = "Macbook", ProductCount = 1, OrderAddress = "Semenov St.", OrderDelivery = "HomeDelivery", OrderDescription = "Empty" } };
 
-            Program.ConsoleProgram(usersList);
+            Program.ConsoleProgram(usersList, ordersList);
             Console.ReadKey();
         }
 
-        public static void ConsoleProgram(List<User> usersList)
+        public static void ConsoleProgram(List<User> usersList, List<Order> ordersList)
         {
             string command = "";
 
@@ -36,7 +37,7 @@
                     case "order":
                         while(command != "back" && command != "exit")
                         {
-                            OrderBlock(usersList, out command);
+                            OrderBlock(usersList, ordersList, out command);
                         }
                         break;
                     case "exit":
@@ -99,7 +100,7 @@
             command = usercommand;
         }
 
-        public static void OrderBlock(List<User> usersList, out string command)
+        public static void OrderBlock(List<User> usersList, List<Order> ordersList, out string command)
         {
             Console.WriteLine("Вы находитесь в блоке oder");
             string ordercommand = "";
@@ -115,7 +116,8 @@
                         while (question != "N")
                         {
                             Console.WriteLine("Новый заказ!");
-                            DeliveryOptions.Delivery(usersList);
+                            Order newOrder = new Order();
+                            DeliveryOptions.Delivery(usersList, ordersList, newOrder);
                             Console.Write("Добавить еще один заказ?(Y/N): ");
                             question = Console.ReadLine();
                         }
@@ -124,9 +126,9 @@
                     case "order info":
                         while (question != "N")
                         {
-                            Console.Write($"Заказов в базе {OrdersList.OrderID.Count}\nВведите номер заказа: ");
+                            Console.Write($"Заказов в базе {ordersList.Count}\nВведите номер заказа: ");
                             int OrderID = Int32.Parse(Console.ReadLine());
-                            OrderID.DisplayOrderInfo();
+                            OrderID.DisplayOrderInfo(ordersList);
                             Console.Write("Продолжить работу с базой заказов?(Y/N): ");
                             question = Console.ReadLine();
                         }

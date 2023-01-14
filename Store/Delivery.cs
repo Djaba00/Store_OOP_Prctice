@@ -5,7 +5,7 @@ namespace OnlineStore
     /// <summary>
     /// Доставка
     /// </summary>
-    abstract class Delivery
+    abstract public class Delivery
     {
         public abstract void DeliveryRun(int orderID, string address, out string OrderDelivery);
     }
@@ -13,7 +13,7 @@ namespace OnlineStore
     /// <summary>
     /// Доставка на дом
     /// </summary>
-    class HomeDelivery : Delivery
+    public class HomeDelivery : Delivery
     {
         public override void DeliveryRun(int orderID, string address, out string orderDelivery)
         {
@@ -42,7 +42,7 @@ namespace OnlineStore
     /// <summary>
     /// Доставка в пункт выдачи
     /// </summary>
-    class PickPointDelivery : Delivery
+    public class PickPointDelivery : Delivery
     {
         public override void DeliveryRun(int orderID, string address, out string orderDelivery)
         {
@@ -54,7 +54,7 @@ namespace OnlineStore
     /// <summary>
     /// Доставка в ближайший магазин
     /// </summary>
-    class ShopDelivery : Delivery
+    public class ShopDelivery : Delivery
     {
         public override void DeliveryRun(int orderID, string address, out string orderDelivery)
         {

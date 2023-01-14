@@ -7,23 +7,23 @@ namespace OnlineStore
     /// </summary>
     public static class OrderInfo
     {
-        public static int OrderReqest()
+        public static int OrderReqest(List<Order> ordersList)
         {
-            Console.WriteLine("Заказов в базе {0}.", OrdersList.OrderID.Count);
+            Console.WriteLine("Заказов в базе {0}.", ordersList.Count);
             Console.Write("Введите номер заказа: ");
             int orderNumber = Int32.Parse(Console.ReadLine());
             return orderNumber;
         }
 
-        public static void DisplayOrderInfo(this int orderNumber)
+        public static void DisplayOrderInfo(this int orderNumber, List<Order> ordersList)
         {
-            if (orderNumber >= 0 && orderNumber <= OrdersList.OrderID.Count - 1)
+            if (orderNumber >= 0 && orderNumber <= ordersList.Count - 1)
             {
                 Console.WriteLine("Данные о заказе {0}:", orderNumber);
-                Console.WriteLine($"Получатель: {OrdersList.OrderBuyer[orderNumber]}\nАдрес доставки: {OrdersList.OrderAddress[orderNumber]}" +
-                    $"\nТовар: {OrdersList.ProductName[orderNumber]} \tКолиество: " +
-                    $"{Math.Max(OrdersList.ProductCount[orderNumber], OrdersList.ProductWeight[orderNumber])}" +
-                    $"\nКомментарий к заказу: {OrdersList.OrderDescription[orderNumber]}");
+                Console.WriteLine($"Получатель: {ordersList[orderNumber].CustomerName}\nАдрес доставки: {ordersList[orderNumber].OrderAddress}" +
+                    $"\nТовар: {ordersList[orderNumber].ProductName} \tКоличество: " +
+                    $"{Math.Max(ordersList[orderNumber].ProductCount, ordersList[orderNumber].ProductWeight)}" +
+                    $"\nКомментарий к заказу: {ordersList[orderNumber].OrderDescription}");
             }
             else
                 Console.WriteLine("Заказ не найден");

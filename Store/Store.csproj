@@ -10,5 +10,7 @@
   <ItemGroup>
     <Compile Remove="Users.cs" />
     <Compile Remove="OnlineStore.cs" />
+    <Compile Remove="NewOrder.cs" />
+    <Compile Remove="OrderList.cs" />
   </ItemGroup>
 </Project>
