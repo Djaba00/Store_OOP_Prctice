@@ -117,7 +117,7 @@
                         {
                             Console.WriteLine("Новый заказ!");
                             Order newOrder = new Order();
-                            DeliveryOptions.Delivery(usersList, ordersList, newOrder);
+                            OrderOptions.ChoosingOptions(usersList, ordersList, newOrder);
                             Console.Write("Добавить еще один заказ?(Y/N): ");
                             question = Console.ReadLine();
                         }

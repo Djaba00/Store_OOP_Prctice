@@ -12,7 +12,7 @@ namespace OnlineStore
         public string CustomerName;
 
         public string ProductName { get; set; }
-        public int ProductPrice { get; set; }
+        public double ProductPrice { get; set; }
         public double ProductWeight { get; set; }
         public int ProductCount { get; set; }
 
@@ -46,7 +46,7 @@ namespace OnlineStore
             order.ProductName = Console.ReadLine();
 
             Console.Write("Укажите цену товара: ");
-            order.ProductPrice = Int32.Parse(Console.ReadLine());
+            order.ProductPrice = Double.Parse(Console.ReadLine());
 
             if (pCount is double)
             {
